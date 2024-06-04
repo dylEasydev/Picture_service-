@@ -13,6 +13,7 @@ Image.init({
     picturesName:{
         type:DataTypes.STRING(30),
         allowNull:false,
+        defaultValue:`profil_default.png`,
         validate:{
             notEmpty:{msg:`Veillez fournir un nom à Votre image`},
             notNull:{msg:`Veillez fournir un nom à Votre image`},
@@ -29,6 +30,7 @@ Image.init({
     urlPictures:{
         type:DataTypes.STRING,
         allowNull:false,
+        defaultValue:`https://easyclass.edu/pictures/profil_default.png`,
         validate:{
             notEmpty:{msg:`Veillez fournir une url à votre image`},
             notNull:{msg:`Veillez fournir une url à votre image`},
