@@ -12,6 +12,7 @@ export class UserController extends BaseController{
     async updateImage(req:Request, res:Response){
         try {
             const userToken = req.body.token as Token
+            console.log(userToken);
             if(typeof userToken.scope ==='string'){
                 if(userToken.scope !== 'updated:profil')
                     return statusResponse.sendResponseJson(
