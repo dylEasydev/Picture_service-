@@ -6,6 +6,7 @@ import { Request,Response } from 'express';
 import fs from 'node:fs/promises';
 import path from 'path';
 import { __basedir } from '../global_dir';
+import sharp from 'sharp';
 
 export class UserController extends BaseController{
     
@@ -36,6 +37,33 @@ export class UserController extends BaseController{
             }
             const uploader = new UploadMulter('pictures',2).uploader();
             await uploader(req,res);
+
+            const filepath = req.file?.path as string;
+            const bufferSharp = await sharp(filepath).metadata();
+
+            const width = bufferSharp.width as number;
+            const heigth = bufferSharp.height as number;
+            const name = `easyclass-uploads-compressed-${Date.now()}.png`
+
+            if(width < 200 || heigth < 200){
+                await sharp(filepath).resize(200 ,200)
+                                     .toFormat('png')
+                                     .png({quality:80})
+                                     .toFile(path.join(__basedir ,`ressources/pictures`,name));
+            }else if(width > 500 || heigth > 500){
+                await sharp(filepath).resize(500 ,500)
+                                    .toFormat('png')
+                                    .png({quality:80})
+                                    .toFile(path.join(__basedir ,`ressources/pictures`,name));
+            }else{
+                await sharp(filepath).toFormat('png')
+                                     .png({quality:80})
+                                     .toFile(path.join(__basedir ,`ressources/pictures`,name));
+            }
+
+            const path_director = path.join(__basedir ,'ressources/pictures',req.file?.filename as string);
+            await fs.unlink(path_director);
+            
             const pictures = await imageService.findImage(userToken.userId ,'user');
             if(pictures === null)
                 return statusResponse.sendResponseJson(
@@ -43,7 +71,7 @@ export class UserController extends BaseController{
                     res,
                     `Aucune image associer à cette utilisateur !`
                 );
-            const picturesUpdate =await imageService.updateImage(pictures,req.file?.filename as string);
+            const picturesUpdate =await imageService.updateImage(pictures,name);
             return statusResponse.sendResponseJson(
                 CodeStatut.VALID_STATUS,
                 res,
