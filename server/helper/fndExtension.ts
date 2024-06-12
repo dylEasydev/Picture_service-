@@ -12,7 +12,7 @@ export class FindExtension{
 
     findMineType(){
         return new Promise<string[]>(async (resolve, reject) => {
-            const path_director = path.join(__basedir ,`ressoures/`,`mine_${this.typeFile}.txt`);
+            const path_director = path.join(__basedir ,`/ressoures`,`/mine_${this.typeFile}.txt`);
             try {
                 const mineType = await fs.readFile(path_director,'utf-8');
                 resolve(mineType.split(','));
@@ -24,7 +24,7 @@ export class FindExtension{
 
     findExtension(){
         return new Promise<string[]>(async (resolve, reject) => {
-            const path_director = path.join(__basedir ,`ressoures/`,`ext_${this.typeFile}.txt`);
+            const path_director = path.join(__basedir ,`/ressoures`,`/ext_${this.typeFile}.txt`);
             try {
                 const extension = await fs.readFile(path_director , 'utf-8');
                 resolve(extension.split(','));

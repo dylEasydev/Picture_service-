@@ -17,7 +17,7 @@ export class UploadMulter {
 
         this.storage = multer.diskStorage({
             destination : (req, file, callback)=>{
-                const dest = path.join(__basedir,'/ressources',this.typeFile);
+                const dest = path.join(__basedir,'/ressources',`/${this.typeFile}`);
                 callback(null, dest);
             },
 

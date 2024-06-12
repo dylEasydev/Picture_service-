@@ -4,7 +4,7 @@ import path from 'path';
 import { __basedir } from '../../global_dir';
 
 const nameExcept = [
-    'profil_default.png','client_default.png','matter_default.png'
+    'profil_default.png','client_default.png','matter_default.png','domain_default.png'
 ];
 
 Image.afterUpdate((instance , options)=>{
@@ -14,6 +14,7 @@ Image.afterUpdate((instance , options)=>{
         if(!nameExcept.includes(picturesName)){
             try {
                 await fs.unlink(path_director);
+                resolve();
             } catch (error) {
                 reject(error);
             }
