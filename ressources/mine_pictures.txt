@@ -1,1 +1,1 @@
-image/png,image/jpeg
+image/png,image/jpeg,image/jpg

@@ -1,1 +1,1 @@
-.png,.jpeg,.PNG,.JPEG
+.png,.jpeg,.PNG,.JPEG,.jpg,.JPG

@@ -63,6 +63,7 @@ export class DomainController extends BaseController{
     
                 const path_director = path.join(__basedir ,'ressources/pictures',`/${req.file?.filename}`);
                 await fs.unlink(path_director);
+                delete req.file;
                 
                 const pictures = await imageService.findImage(parseInt(req.params.id) ,'domains');
                 if(pictures === null)
