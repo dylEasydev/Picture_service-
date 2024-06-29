@@ -7,10 +7,10 @@ const nameExcept = [
     'profil_default.png','client_default.png','matter_default.png','domain_default.png'
 ];
 
-Image.afterUpdate((instance , options)=>{
+Image.afterUpdate((instance)=>{
     return new Promise<void>(async (resolve, reject) => {
         const picturesName = instance.previous().picturesName as string;
-        const path_director = path.join(__basedir ,'ressources/pictures',picturesName);
+        const path_director = path.join(__basedir ,'/ressources/pictures',`/${picturesName}`);
         if(!nameExcept.includes(picturesName)){
             try {
                 await fs.unlink(path_director);

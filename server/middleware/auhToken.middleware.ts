@@ -1,40 +1,39 @@
 import { Response ,Request } from 'express';
-import { CodeStatut, statusResponse } from '../helper';
-import jwt from 'jsonwebtoken';
+import { CodeStatut, generateToken, statusResponse } from '../helper';
+import { Token } from '../db/interface';
 
 class AuthToken {
 
     async secureMiddleware(req:Request ,res:Response ,next :()=>void){
-        const bearerToken = req.headers.authorization;
+        try {
+            const bearerToken = req.headers.authorization;
 
-        if(!bearerToken){
-            return statusResponse.sendResponseJson(
-                CodeStatut.NOT_PERMISSION_STATUS,
-                res,
-                `Aucun Token n'as été fourni !`
-            );
-        }
-
-        const token = bearerToken.split(' ')[1];
-        if(!token){
-            return statusResponse.sendResponseJson(
-                CodeStatut.NOT_PERMISSION_STATUS,
-                res,
-                `Aucun Token n'as été fourni !`
-            );
-        }
-
-        jwt.verify(token ,process.env.PRIVATE_KEY as string,(err , decode)=>{
-            if(err){
+            if(!bearerToken){
                 return statusResponse.sendResponseJson(
-                    CodeStatut.UNAUTH_STATUS,
+                    CodeStatut.NOT_PERMISSION_STATUS,
                     res,
                     `Aucun Token n'as été fourni !`
                 );
             }
-            req.body.token = decode ;
+    
+            const token = bearerToken.split(' ')[1];
+            if(!token){
+                return statusResponse.sendResponseJson(
+                    CodeStatut.NOT_PERMISSION_STATUS,
+                    res,
+                    `Aucun Token n'as été fourni !`
+                );
+            }
+            req.body.token = await generateToken.verifyToken<Token>(token);
             next();
-        });
+        } catch (error) {
+            statusResponse.sendResponseJson(
+                CodeStatut.SERVER_STATUS,
+                res,
+                `Erreur au niveau du serveur , réessayer plus tard !`,
+                error
+            )
+        }
     }
 }
 

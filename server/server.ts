@@ -1,6 +1,5 @@
 import expressServer from './app';
-import http from 'http';
-import { initDB } from './db';
+import http from 'node:http';
 
 export const launchHttpServer = ()=>{
     const port:unknown = process.env.PORT ;
@@ -8,9 +7,6 @@ export const launchHttpServer = ()=>{
     
     const pictureServer = http.createServer(expressServer);
     
-    initDB().then(()=>console.log('sychronization reussi !!'))
-            .catch(error=>console.error(error));
-
     try {
         pictureServer.listen(port as number , hostName,()=>{
             console.log(`Notre serveur tourne à l'adresse http://${hostName}:${port}`)

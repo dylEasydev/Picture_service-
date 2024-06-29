@@ -1,8 +1,10 @@
 import statusResponse,{ CodeStatut , StatusResponse } from './helperStatusResponse';
-import { FindExtension } from './fndExtension';
+import { FindExtension } from './findExtension';
 import { UploadMulter ,ExtensionError } from './upload';
+import generateToken from './generateToken';
 
 export {
     CodeStatut, StatusResponse,statusResponse,
-    FindExtension,ExtensionError,UploadMulter
+    FindExtension,ExtensionError,UploadMulter,
+    generateToken
 };

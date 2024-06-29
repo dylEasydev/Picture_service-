@@ -19,7 +19,7 @@ export class UserController extends BaseController{
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_PERMISSION_STATUS,
                         res,
-                        `Aucune Permission de mis à jour d'une image !`
+                        `Aucune permission de mis à jour d'une image !`
                     );
             }else if(typeof userToken.scope === 'undefined'){
                 return statusResponse.sendResponseJson(
@@ -43,7 +43,7 @@ export class UserController extends BaseController{
 
             const width = bufferSharp.width as number;
             const heigth = bufferSharp.height as number;
-            const name = `IMG-EC-${Date.now()}.png`
+            const name = `IMG-EC-${Date.now()}.jpeg`
 
             if(width < 200 || heigth < 200){
                 await sharp(filepath).resize(200 ,200)
@@ -76,7 +76,7 @@ export class UserController extends BaseController{
             return statusResponse.sendResponseJson(
                 CodeStatut.VALID_STATUS,
                 res,
-                `mis à jour réussi !`,
+                `Mis à jour réussi !`,
                 picturesUpdate
             );
         } catch (error) {
@@ -127,20 +127,20 @@ export class UserController extends BaseController{
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_PERMISSION_STATUS,
                         res,
-                        `Aucune Permission de supprimer une image !`
+                        `Aucune permission de supprimer une image !`
                     );
             }else if(typeof userToken.scope === 'undefined'){
                 return statusResponse.sendResponseJson(
                     CodeStatut.NOT_PERMISSION_STATUS,
                     res,
-                    `Aucune Permission de supprimer une image !`
+                    `Aucune permission de supprimer une image !`
                 );
             }else{
                 if(!userToken.scope.includes('deleted:profil'))
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_PERMISSION_STATUS,
                         res,
-                        `Aucune Permission de supprimer une image !`
+                        `Aucune permission de supprimer une image !`
                     );
             }
             const pictures = await imageService.findImage(userToken.userId ,'user');
@@ -154,7 +154,7 @@ export class UserController extends BaseController{
             return statusResponse.sendResponseJson(
                 CodeStatut.VALID_STATUS,
                 res,
-                `suppression réussi !`,
+                `Suppression réussi !`,
                 picturesUpdate
             );
         } catch (error) {

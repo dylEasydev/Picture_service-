@@ -1,11 +1,12 @@
 import multer from 'multer';
 import path from 'path';
 import { __basedir } from '../global_dir';
-import { FindExtension } from './fndExtension';
+import { FindExtension } from './findExtension';
 import util from 'util';
 
 
-export class ExtensionError extends Error{}; 
+export class ExtensionError extends Error{};
+
 export class UploadMulter {
 
     public upload:multer.Multer;
@@ -41,10 +42,10 @@ export class UploadMulter {
                     if(data.includes(mineType)){
                         validExt.findExtension().then(data=>{
                             if(data.includes(extension)) callback(null ,true)
-                            else callback(new ExtensionError(`mauvais MineType,les Minetypes admis sont ${data}`));
+                            else callback(new ExtensionError(`Mauvaise extension,les extensions admises sont ${data}`));
                         })
                     }else{
-                        callback(new ExtensionError(`mauvais MineType,les Minetypes admis sont ${data}`));
+                        callback(new ExtensionError(`Mauvais minetype,les minetypes admises sont ${data}`));
                     }
                 }).catch(error=>callback(error))
             }

@@ -19,20 +19,20 @@ export class DomainController extends BaseController{
                         return statusResponse.sendResponseJson(
                             CodeStatut.NOT_PERMISSION_STATUS,
                             res,
-                            `Aucune Permission de mis à jour d'une image !`
+                            `Aucune permission de mis à jour d'une image !`
                         );
                 }else if(typeof userToken.scope === 'undefined'){
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_PERMISSION_STATUS,
                         res,
-                        `Aucune Permission de mis à jour d'une image !`
+                        `Aucune permission de mis à jour d'une image !`
                     );
                 }else{
                     if(!userToken.scope.includes('updated:imageDomain'))
                         return statusResponse.sendResponseJson(
                             CodeStatut.NOT_PERMISSION_STATUS,
                             res,
-                            `Aucune Permission de mis à jour d'une image !`
+                            `Aucune permission de mis à jour d'une image !`
                         );
                 }
                 const uploader = new UploadMulter('pictures',2).uploader();
@@ -43,21 +43,21 @@ export class DomainController extends BaseController{
     
                 const width = bufferSharp.width as number;
                 const heigth = bufferSharp.height as number;
-                const name = `easyclass-upload-compressed-${Date.now()}.png`
+                const name = `IMG-EC-${Date.now()}.jpeg`
     
                 if(width < 200 || heigth < 200){
                     await sharp(filepath).resize(200 ,200)
-                                         .toFormat('png')
-                                         .png({quality:80})
+                                         .toFormat('jpeg')
+                                         .jpeg({quality:80})
                                          .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
                 }else if(width > 500 || heigth > 500){
                     await sharp(filepath).resize(500 ,500)
-                                        .toFormat('png')
-                                        .png({quality:80})
+                                        .toFormat('jpeg')
+                                        .jpeg({quality:80})
                                         .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
                 }else{
-                    await sharp(filepath).toFormat('png')
-                                         .png({quality:80})
+                    await sharp(filepath).toFormat('jpeg')
+                                         .jpeg({quality:80})
                                          .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
                 }
     
@@ -65,7 +65,7 @@ export class DomainController extends BaseController{
                 await fs.unlink(path_director);
                 delete req.file;
                 
-                const pictures = await imageService.findImage(parseInt(req.params.id) ,'domains');
+                const pictures = await imageService.findImage(parseInt(req.params.id) ,'domain');
                 if(pictures === null)
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_FOUND_STATUS,
@@ -76,7 +76,7 @@ export class DomainController extends BaseController{
                 return statusResponse.sendResponseJson(
                     CodeStatut.VALID_STATUS,
                     res,
-                    `mis à jour réussi !`,
+                    `Mis à jour réussi !`,
                     picturesUpdate
                 );
             } catch (error) {
