@@ -4,14 +4,14 @@ import{DataTypes} from 'sequelize';
 
 Image.init({
     id:{
-        type:DataTypes.INTEGER.UNSIGNED,
+        type:DataTypes.INTEGER,
         autoIncrement:true,
         allowNull:false,
         primaryKey:true,
         unique:true
     },
     picturesName:{
-        type:DataTypes.STRING(30),
+        type:DataTypes.STRING,
         allowNull:false,
         defaultValue:`profil_default.png`,
         validate:{
@@ -42,7 +42,7 @@ Image.init({
         allowNull:false
     },
     foreignId:{
-        type:DataTypes.INTEGER.UNSIGNED,
+        type:DataTypes.INTEGER,
         allowNull:false
     },
     createdAt: DataTypes.DATE ,

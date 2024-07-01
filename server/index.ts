@@ -4,7 +4,7 @@ import { launchHttpServer } from './server';
 import { initDB } from './db';
 
 const launchServer = (isRequiredClustering:Boolean)=>{
-    initDB().then(()=>console.log('sychronization reussi !!'))
+    initDB().then(()=>console.log('sychronisation avec la BD reussi !'))
     .catch(error=>console.error(error));
     if(isRequiredClustering && cluster.isPrimary){
         launchCluster();
@@ -15,4 +15,4 @@ const launchServer = (isRequiredClustering:Boolean)=>{
     }
 }
 
-launchServer(true);
+launchServer(false);

@@ -91,6 +91,7 @@ export class DomainController extends BaseController{
                         )
                     })
                 }
+                
                 if(error instanceof ExtensionError){
                     return statusResponse.sendResponseJson(
                         CodeStatut.CLIENT_STATUS,
