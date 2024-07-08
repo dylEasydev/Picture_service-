@@ -1,6 +1,7 @@
 import { Response ,Request } from 'express';
 import { CodeStatut, generateToken, statusResponse } from '../helper';
 import { Token } from '../db/interface';
+import { TokenExpiredError , JsonWebTokenError, NotBeforeError } from 'jsonwebtoken';
 
 class AuthToken {
 
@@ -27,8 +28,16 @@ class AuthToken {
             req.body.token = await generateToken.verifyToken<Token>(token);
             next();
         } catch (error) {
-            statusResponse.sendResponseJson(
-                CodeStatut.SERVER_STATUS,
+            if((error instanceof TokenExpiredError) || (error instanceof JsonWebTokenError ) || (error instanceof NotBeforeError)){
+                return statusResponse.sendResponseJson(
+                    CodeStatut.NOT_PERMISSION_STATUS, 
+                    res,
+                    error.message,
+                    error
+                )
+            }
+            return statusResponse.sendResponseJson(
+                CodeStatut.SERVER_STATUS, 
                 res,
                 `Erreur au niveau du serveur , réessayer plus tard !`,
                 error

@@ -37,8 +37,14 @@ export class UserController extends BaseController{
             }
             const uploader = new UploadMulter('pictures',2).uploader();
             await uploader(req,res);
-
-            const filepath = req.file?.path as string;
+            if(!req.file){
+                return statusResponse.sendResponseJson(
+                    CodeStatut.CLIENT_STATUS,
+                    res,
+                    `Aucune image fourni !`
+                )
+            }
+            const filepath = req.file.path as string;
             const bufferSharp = await sharp(filepath).metadata();
 
             const width = bufferSharp.width as number;
@@ -61,7 +67,7 @@ export class UserController extends BaseController{
                                      .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
             }
 
-            const path_director = path.join(__basedir ,'ressources/pictures',`/${req.file?.filename}`);
+            const path_director = path.join(__basedir ,'ressources/pictures',`/${req.file.filename}`);
             await fs.unlink(path_director);
             delete req.file;
 
