@@ -1,7 +1,7 @@
 import express,{Application} from 'express';
 import * as bodyParser from 'body-parser';
 import cors from 'cors';
-import { domainRouter, indexRouter, userRouter } from './router';
+import { domainRouter, indexRouter, matterRouter, userRouter } from './router';
 import path  from 'path';
 import { __basedir } from './global_dir';
 
@@ -21,6 +21,7 @@ class ExpressApp{
                           .use('/',indexRouter)
                           .use('/image/user',userRouter)
                           .use('/image/domain',domainRouter)
+                          .use('/image/matter',matterRouter)
                           .use('*',(req,res)=>{
                                 res.redirect('/docs');
                           })

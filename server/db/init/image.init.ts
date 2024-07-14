@@ -31,7 +31,7 @@ Image.init({
     urlPictures:{
         type:DataTypes.STRING,
         allowNull:false,
-        defaultValue:`${__baseurl}/profil_default.png`,
+        defaultValue:`${__baseurl}/public/profil_default.png`,
         validate:{
             notEmpty:{msg:`Veillez fournir une url à votre image`},
             notNull:{msg:`Veillez fournir une url à votre image`},
