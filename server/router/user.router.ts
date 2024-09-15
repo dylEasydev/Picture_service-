@@ -5,8 +5,8 @@ import { BaseRouter } from './base.router';
 export class UserRouter extends BaseRouter<UserController>{
 
     public initRoute(): void {
-        this.routerServeur.put('/update',auth.secureMiddleware,this.controllerService.updateImage);
-        this.routerServeur.delete('/delete',auth.secureMiddleware,this.controllerService.deleteImage);
+        this.routerServeur.put('/',auth.secureMiddleware,this.controllerService.updateImage);
+        this.routerServeur.delete('/',auth.secureMiddleware,this.controllerService.deleteImage);
     }
 }
 

@@ -4,7 +4,7 @@ import { CodeStatut, ExtensionError, UploadMulter, statusResponse } from '../hel
 import { BaseController } from './base.controller';
 import { Request,Response } from 'express';
 import fs from 'node:fs/promises';
-import path from 'path';
+import path from 'node:path';
 import { __basedir } from '../global_dir';
 import sharp from 'sharp';
 import { ValidationError } from 'sequelize';
