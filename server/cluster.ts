@@ -4,8 +4,6 @@ import cluster from 'node:cluster';
 export const launchCluster = ()=>{
     let numberCluster = availableParallelism();
 
-    console.log(`nous avons ${numberCluster} de coeur`);
-
     for(let i = 0 ;i < numberCluster; i++){
         const worker = cluster.fork();
 

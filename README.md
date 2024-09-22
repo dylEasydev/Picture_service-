@@ -27,15 +27,24 @@ Avant de se lancer à coeur joie vers le demarage de se projet rassurez vous d'a
 ## installation
 Pour lancer le projet il faut tous d'abord installer les dependences .
 ouvrez le terminal et deplacez vous au dossier où vous avez effectué le pull.
+>[!NOTE]
+>commande du pull
+>```
+>    mkdir oauth2-service
+>    cd ./oauth2-service
+>    git init 
+>    git add remote origin (addresse ssh du depôt )
+>    git pull
+>```
 et  lancer `npm install`
 
 ## configuration
 
-Créer un fichier `.env`àla racine du projet puis copiez le code si dessous à l'interieur .
+Créer un fichier `.env` à la racine du projet puis copiez le code si dessous à l'interieur .
 
 ```js
 
-PORT = 3001
+PORT = 3001//port du serveur 
 DB_NAME = //même base de donnée que le serveur d'authentification 
 DB_HOST = localhost
 DB_DRIVER = //postgres ou mysql
@@ -46,18 +55,26 @@ HOSTNAME = 127.0.0.1
 PRIVATE_KEY = //même clés que le serveur d'autehntification
 
 ```
-## demarage du serveur
+
+Généré les clés pour securisé le serveur HTTP/2 . Vous auriez besion d'[openssl]() .
+
+```
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -out server.csr
+openssl x509 -req -days 365  -in server.csr -signkey server.key -out server.crt
+```
+## demarrage du serveur
 ouvrez le terminal et lancez la commande `npm run dev` .
 
-pour les adepte de javascripts vous pouvez compiler grâce à la commande `npm build`.
-Puis lancer le serveur avec la commande `node -r dotenv/config ./dist/server/index.js`
+pour les adepte de javascript vous pouvez compiler grâce à la commande `npm build`.
+Puis lancer le serveur avec la commande `node -r dotenv/config ./dist/index.js`
 
 ## exemple d'utilisation
 ```js
 import axios from 'axios';
 const jeton = ``//jeton obtenu lors du login  
 const axiosRequest = axios.create({
-    baseURL:'http://localhost:3001/',
+    baseURL:'https://localhost:3001/',
     timeout:3000
     hearder{
          headers:{
@@ -65,12 +82,13 @@ const axiosRequest = axios.create({
         }
     }
 });
-const newStudent = axiosRequest.delete('/image/user').then((response)=>{
+const picturesDeleted = axiosRequest.delete('/image/user').then((response)=>{
     return response.data;
-})
+});
+
 ```
 ## Documentation
-la documentation est à l'adresse http://127.0.0.1:3001/docs .
+la documentation est à l'adresse ``https://127.0.0.1:${process.env.PORT}/docs`` .
 son fichier html [ici](/docs/index.html) à enrichir si vous voulez bien . 
 
 ## conctact

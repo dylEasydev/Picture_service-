@@ -3,8 +3,8 @@ import { imageService } from '../db/service';
 import { CodeStatut, ExtensionError, UploadMulter, statusResponse } from '../helper';
 import { BaseController } from './base.controller';
 import { Request,Response } from 'express';
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import { unlink } from 'node:fs/promises';
+import { join } from 'node:path';
 import { __basedir } from '../global_dir';
 import sharp from 'sharp';
 
@@ -44,7 +44,7 @@ export class DomainController extends BaseController{
                         `Aucune image fourni !`
                     )
                 }
-                const filepath = req.file.path as string;
+                const filepath = req.file.path ;
                 const bufferSharp = await sharp(filepath).metadata();
     
                 const width = bufferSharp.width as number;
@@ -55,20 +55,20 @@ export class DomainController extends BaseController{
                     await sharp(filepath).resize(200 ,200)
                                          .toFormat('jpeg')
                                          .jpeg({quality:80})
-                                         .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
+                                         .toFile(join(__basedir ,`ressources/pictures`,`/${name}`));
                 }else if(width > 500 || heigth > 500){
                     await sharp(filepath).resize(500 ,500)
                                         .toFormat('jpeg')
                                         .jpeg({quality:80})
-                                        .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
+                                        .toFile(join(__basedir ,`ressources/pictures`,`/${name}`));
                 }else{
                     await sharp(filepath).toFormat('jpeg')
                                          .jpeg({quality:80})
-                                         .toFile(path.join(__basedir ,`ressources/pictures`,`/${name}`));
+                                         .toFile(join(__basedir ,`ressources/pictures`,`/${name}`));
                 }
     
-                const path_director = path.join(__basedir ,'ressources/pictures',`/${req.file.filename}`);
-                await fs.unlink(path_director);
+                const path_director = join(__basedir ,'ressources/pictures',`/${req.file.filename}`);
+                await unlink(path_director);
                 delete req.file;
                 
                 const pictures = await imageService.findImage(parseInt(req.params.id) ,'domain');
@@ -87,8 +87,8 @@ export class DomainController extends BaseController{
                 );
             } catch (error) {
                 if(req.file){
-                    const path_director = path.join(__basedir ,'ressources/pictures',req.file.filename);
-                    fs.unlink(path_director).catch(err=>{
+                    const path_director = join(__basedir ,'ressources/pictures',req.file.filename);
+                    unlink(path_director).catch(err=>{
                         return statusResponse.sendResponseJson(
                             CodeStatut.SERVER_STATUS,
                             res,

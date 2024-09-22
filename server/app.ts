@@ -2,14 +2,15 @@ import express,{Application} from 'express';
 import * as bodyParser from 'body-parser';
 import cors from 'cors';
 import { domainRouter, indexRouter, matterRouter, userRouter } from './router';
-import path  from 'path';
+import { join } from 'path';
 import { __basedir } from './global_dir';
+import bridge  from 'http2-express-bridge';
 
 class ExpressApp{
     public expressServer: Application;
 
     constructor(){
-        this.expressServer = express();
+        this.expressServer = bridge(express);
         this.configServer();
     }
 
@@ -17,7 +18,7 @@ class ExpressApp{
         this.expressServer.use(bodyParser.json())
                           .use(bodyParser.urlencoded({extended:true}))
                           .use(cors())
-                          .use('/public',express.static(path.join(__basedir,'/ressources')))
+                          .use('/public',express.static(join(__basedir,'/ressources')))
                           .use('/',indexRouter)
                           .use('/image/user',userRouter)
                           .use('/image/domain',domainRouter)
