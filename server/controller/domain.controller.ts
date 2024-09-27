@@ -70,8 +70,8 @@ export class DomainController extends BaseController{
                 const path_director = join(__basedir ,'ressources/pictures',`/${req.file.filename}`);
                 await unlink(path_director);
                 delete req.file;
-                
-                const pictures = await imageService.findImage(parseInt(req.params.id) ,'domain');
+                const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
+                const pictures = await imageService.findImage(id ,'domain');
                 if(pictures === null)
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_FOUND_STATUS,
@@ -141,7 +141,8 @@ export class DomainController extends BaseController{
                             `Aucune Permission de supprimer une image !`
                         );
                 }
-                const pictures = await imageService.findImage(parseInt(req.params.id),'domain');
+                const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
+                const pictures = await imageService.findImage(id,'domain');
                 if(pictures === null)
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_FOUND_STATUS,

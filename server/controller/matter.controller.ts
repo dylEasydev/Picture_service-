@@ -1,5 +1,5 @@
 import { Token } from '../db/interface';
-import { imageService } from '../db/service';
+import { imageService, MatterService } from '../db/service';
 import { CodeStatut, ExtensionError, UploadMulter, statusResponse } from '../helper';
 import { BaseController } from './base.controller';
 import { Request,Response } from 'express';
@@ -7,11 +7,12 @@ import { unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { __basedir } from '../global_dir';
 import sharp from 'sharp';
+import { RequestError } from '../db/service/matter.service';
 
 export class MatterController extends BaseController{
     
     async updateImage(req:Request, res:Response){
-        if(req.params.id && req.params.username){
+        if(req.params.id){
             try {
                 const userToken = req.body.token as Token
                 if(typeof userToken.scope ==='string'){
@@ -35,7 +36,9 @@ export class MatterController extends BaseController{
                             `Aucune permission de mis à jour d'une image !`
                         );
                 }
-                if(userToken.userName !== req.params.username){
+                const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
+                const matter = (await new MatterService().getMatterById(id)).data;
+                if(userToken.userId !== matter.userId){
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_PERMISSION_STATUS,
                         res,
@@ -77,8 +80,7 @@ export class MatterController extends BaseController{
                 const path_director = join(__basedir ,'ressources/pictures',`/${req.file.filename}`);
                 await unlink(path_director);
                 delete req.file;
-                
-                const pictures = await imageService.findImage(parseInt(req.params.id) ,'matter');
+                const pictures = await imageService.findImage(id ,'matter');
                 if(pictures === null)
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_FOUND_STATUS,
@@ -104,7 +106,14 @@ export class MatterController extends BaseController{
                         )
                     })
                 }
-                
+                if(error instanceof RequestError){
+                    return statusResponse.sendResponseJson(
+                        error.status,
+                        res,
+                        error.message,
+                        error.data
+                    );
+                }
                 if(error instanceof ExtensionError){
                     return statusResponse.sendResponseJson(
                         CodeStatut.CLIENT_STATUS,
@@ -124,7 +133,7 @@ export class MatterController extends BaseController{
     }
 
     async deleteImage(req:Request , res:Response){
-        if(req.params.id && req.params.username){
+        if(req.params.id){
             try {
                 const userToken = req.body.token as Token
                 if(typeof userToken.scope ==='string'){
@@ -148,14 +157,16 @@ export class MatterController extends BaseController{
                             `Aucune Permission de supprimer une image !`
                         );
                 }
-                if(userToken.userName !== req.params.username){
+                const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
+                const matter = (await new MatterService().getMatterById(id)).data
+                if(userToken.userId !== matter.userId){
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_PERMISSION_STATUS,
                         res,
                         `Cette Image n'est pas celle de votre matière , Aucune permission de suppression !`
                     );
                 }
-                const pictures = await imageService.findImage(parseInt(req.params.id),'matter');
+                const pictures = await imageService.findImage(id,'matter');
                 if(pictures === null)
                     return statusResponse.sendResponseJson(
                         CodeStatut.NOT_FOUND_STATUS,
@@ -170,6 +181,14 @@ export class MatterController extends BaseController{
                     picturesUpdate
                 );
             } catch (error) {
+                if(error instanceof ExtensionError){
+                    return statusResponse.sendResponseJson(
+                        CodeStatut.CLIENT_STATUS,
+                        res,
+                        error.message,
+                        error
+                    )
+                }
                 return statusResponse.sendResponseJson(
                     CodeStatut.SERVER_STATUS,
                     res,

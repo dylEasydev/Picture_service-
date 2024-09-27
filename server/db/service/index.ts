@@ -1,5 +1,6 @@
 import imageService from './image.service';
+import { MatterService } from './matter.service';
 
 export {
-    imageService
+    imageService, MatterService
 };
