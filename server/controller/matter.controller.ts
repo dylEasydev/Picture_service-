@@ -14,28 +14,7 @@ export class MatterController extends BaseController{
     async updateImage(req:Request, res:Response){
         if(req.params.id){
             try {
-                const userToken = req.body.token as Token
-                if(typeof userToken.scope ==='string'){
-                    if(userToken.scope !== 'updated:imageMatter')
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune permission de mis à jour d'une image !`
-                        );
-                }else if(typeof userToken.scope === 'undefined'){
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune permission de mis à jour d'une image !`
-                    );
-                }else{
-                    if(!userToken.scope.includes('updated:imageMatter'))
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune permission de mis à jour d'une image !`
-                        );
-                }
+                const userToken = req.body.token as Token;
                 const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
                 const matter = (await new MatterService().getMatterById(id)).data;
                 if(userToken.userId !== matter.userId){
@@ -135,28 +114,7 @@ export class MatterController extends BaseController{
     async deleteImage(req:Request , res:Response){
         if(req.params.id){
             try {
-                const userToken = req.body.token as Token
-                if(typeof userToken.scope ==='string'){
-                    if(userToken.scope !== 'deleted:imageMatter')
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune Permission de supprimer une image !`
-                        );
-                }else if(typeof userToken.scope === 'undefined'){
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune Permission de supprimer une image !`
-                    );
-                }else{
-                    if(!userToken.scope.includes('deleted:imageMatter'))
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune Permission de supprimer une image !`
-                        );
-                }
+                const userToken = req.body.token as Token;
                 const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
                 const matter = (await new MatterService().getMatterById(id)).data
                 if(userToken.userId !== matter.userId){

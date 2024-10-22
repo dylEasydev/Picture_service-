@@ -13,28 +13,6 @@ export class DomainController extends BaseController{
     async updateImage(req:Request, res:Response){
         if(req.params.id){
             try {
-                const userToken = req.body.token as Token
-                if(typeof userToken.scope ==='string'){
-                    if(userToken.scope !== 'updated:imageDomain')
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune permission de mis à jour d'une image !`
-                        );
-                }else if(typeof userToken.scope === 'undefined'){
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune permission de mis à jour d'une image !`
-                    );
-                }else{
-                    if(!userToken.scope.includes('updated:imageDomain'))
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune permission de mis à jour d'une image !`
-                        );
-                }
                 const uploader = new UploadMulter('pictures',2).uploader();
                 await uploader(req,res);
                 if(!req.file){
@@ -119,28 +97,6 @@ export class DomainController extends BaseController{
     async deleteImage(req:Request , res:Response){
         if(req.params.id){
             try {
-                const userToken = req.body.token as Token
-                if(typeof userToken.scope ==='string'){
-                    if(userToken.scope !== 'deleted:imageDomain')
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune Permission de supprimer une image !`
-                        );
-                }else if(typeof userToken.scope === 'undefined'){
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune Permission de supprimer une image !`
-                    );
-                }else{
-                    if(!userToken.scope.includes('deleted:imageDomain'))
-                        return statusResponse.sendResponseJson(
-                            CodeStatut.NOT_PERMISSION_STATUS,
-                            res,
-                            `Aucune Permission de supprimer une image !`
-                        );
-                }
                 const id = isNaN(parseInt(req.params.id))?0:parseInt(req.params.id);
                 const pictures = await imageService.findImage(id,'domain');
                 if(pictures === null)

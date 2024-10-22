@@ -13,28 +13,7 @@ export class UserController extends BaseController{
     
     async updateImage(req:Request, res:Response){
         try {
-            const userToken = req.body.token as Token
-            if(typeof userToken.scope ==='string'){
-                if(userToken.scope !== 'updated:profil')
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune permission de mis à jour d'une image !`
-                    );
-            }else if(typeof userToken.scope === 'undefined'){
-                return statusResponse.sendResponseJson(
-                    CodeStatut.NOT_PERMISSION_STATUS,
-                    res,
-                    `Aucune Permission de mis à jour d'une image !`
-                );
-            }else{
-                if(!userToken.scope.includes('updated:profil'))
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune Permission de mis à jour d'une image !`
-                    );
-            }
+            const userToken = req.body.token as Token;
             const uploader = new UploadMulter('pictures',2).uploader();
             await uploader(req,res);
             if(!req.file){
@@ -127,28 +106,7 @@ export class UserController extends BaseController{
 
     async deleteImage(req:Request , res:Response){
         try {
-            const userToken = req.body.token as Token
-            if(typeof userToken.scope ==='string'){
-                if(userToken.scope !== 'deleted:profil')
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune permission de supprimer une image !`
-                    );
-            }else if(typeof userToken.scope === 'undefined'){
-                return statusResponse.sendResponseJson(
-                    CodeStatut.NOT_PERMISSION_STATUS,
-                    res,
-                    `Aucune permission de supprimer une image !`
-                );
-            }else{
-                if(!userToken.scope.includes('deleted:profil'))
-                    return statusResponse.sendResponseJson(
-                        CodeStatut.NOT_PERMISSION_STATUS,
-                        res,
-                        `Aucune permission de supprimer une image !`
-                    );
-            }
+            const userToken = req.body.token as Token;
             const pictures = await imageService.findImage(userToken.userId ,'user');
             if(pictures === null)
                 return statusResponse.sendResponseJson(

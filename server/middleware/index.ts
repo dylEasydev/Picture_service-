@@ -1,3 +1,2 @@
 import auth from './auhToken.middleware';
-
-export {auth};
+export { auth };
